@@ -56,7 +56,8 @@ libstdc++-6-dev \
 gobjc-6 gobjc++-6 \
 gobjc++ \
 libstdc++-6-dev libstdc++-6-doc libstdc++-6-pic \
-libstdc++6 cmake xpdf libxrandr-dev
+libstdc++6 cmake xpdf libxrandr-dev \
+libcurl4-gnutls-dev
 
 if [ "$APPS" = true ] ; then
   sudo apt -y install curl
@@ -154,6 +155,23 @@ showPrompt
 echo -e "\n\n"
 echo -e "${GREEN}Building GNUstep-base...${NC}"
 cd ../libs-base/
+./configure
+make -j8
+sudo -E make install
+
+. /usr/GNUstep/System/Library/Makefiles/GNUstep.sh
+
+showPrompt
+
+# Build GNUstep corebase
+echo -e "\n\n"
+echo -e "${GREEN}Building GNUstep-corebase...${NC}"
+
+# helps configure to find objc-runtime include files
+export CFLAGS="$CFLAGS `gnustep-config --objc-flags`"
+
+cd ../libs-corebase/
+make clean
 ./configure
 make -j8
 sudo -E make install

@@ -196,6 +196,28 @@ cd ../libs-base/
 make -j8
 sudo -E make install
 
+. /usr/GNUstep/System/Library/Makefiles/GNUstep.sh
+
+showPrompt
+
+# Build GNUstep corebase
+echo -e "\n\n"
+echo -e "${GREEN}Building GNUstep-corebase...${NC}"
+
+# helps configure to find objc-runtime include files
+SAVEDCFLAGS=$CFLAGS
+export CFLAGS="$CFLAGS `gnustep-config --objc-flags`"
+
+cd ../libs-corebase/
+make clean
+./configure
+make -j8
+sudo -E make install
+
+export CFLAGS=$SAVEDFLAGS
+
+. /usr/GNUstep/System/Library/Makefiles/GNUstep.sh
+
 showPrompt
 
 # Build GNUstep GUI
