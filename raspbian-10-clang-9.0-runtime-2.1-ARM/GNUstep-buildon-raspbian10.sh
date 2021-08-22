@@ -78,7 +78,9 @@ libxt-dev libssl-dev \
 libasound2-dev libjack-dev libjack0 libportaudio2 \
 libportaudiocpp0 portaudio19-dev \
 libstdc++-6-dev libstdc++-6-doc libstdc++-6-pic \
-libstdc++6 cmake xpdf libxrandr-dev
+libstdc++6 cmake xpdf libxrandr-dev \
+libcurl4-gnutls-dev
+     
 
 if [ "$APPS" = true ] ; then
   sudo apt -y install curl
@@ -195,6 +197,29 @@ cd ../libs-base/
 ./configure
 make -j8
 sudo -E make install
+
+. /usr/GNUstep/System/Library/Makefiles/GNUstep.sh
+
+showPrompt
+
+# Build GNUstep corebase
+echo -e "\n\n"
+echo -e "${GREEN}Building GNUstep-corebase...${NC}"
+
+# helps configure to find objc-runtime include files
+SAVEDCFLAGS=$CFLAGS
+export CFLAGS="$CFLAGS `gnustep-config --objc-flags`"
+
+cd ../libs-corebase/
+# clean doesn't work the very first time
+# make clean
+./configure
+make -j8
+sudo -E make install
+
+export CFLAGS=$SAVEDFLAGS
+
+. /usr/GNUstep/System/Library/Makefiles/GNUstep.sh
 
 showPrompt
 
