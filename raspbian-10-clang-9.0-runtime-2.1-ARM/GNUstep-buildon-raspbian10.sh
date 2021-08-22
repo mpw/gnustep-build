@@ -211,7 +211,8 @@ SAVEDCFLAGS=$CFLAGS
 export CFLAGS="$CFLAGS `gnustep-config --objc-flags`"
 
 cd ../libs-corebase/
-make clean
+# clean doesn't work the very first time
+# make clean
 ./configure
 make -j8
 sudo -E make install
